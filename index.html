@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" href="pixel.png" type="image/png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meeting Requests ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --blood-red: #8b0000;
+            --dark-blood: #5a0000;
+            --light-blood: #ff4d4d;
+            --green: #77dd77;
+            --pale: #fff0f0;
+            --black: #1a0000;
+            --gold: #d4af37;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--black);
+            color: var(--pale);
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+            cursor: url(http://www.rw-designer.com/cursor-extern.php?id=95050), auto;
+        }
+        h1, h2 {
+            font-family: 'Indie Flower', cursive;
+            font-weight: 600;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: var(--dark-blood);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 25px rgba(139, 0, 0, 0.7);
+            border: 1px solid var(--light-blood);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--light-blood), transparent);
+            animation: bloodFlow 3s infinite;
+        }
+        
+        @keyframes bloodFlow {
+            0% { background-position: -100% 0; }
+            100% { background-position: 100% 0; }
+        }
+        
+        h1 {
+            color: var(--pale);
+            font-size: 2.2rem;
+            text-shadow: 0 0 10px var(--light-blood);
+            margin-bottom: 25px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        h1::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 25%;
+            right: 25%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--light-blood), transparent);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--pale);
+            font-size: 1.1rem;
+        }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            background-color: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--light-blood);
+            border-radius: 5px;
+            font-family: inherit;
+            color: var(--pale);
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--pale);
+            box-shadow: 0 0 8px var(--light-blood);
+        }
+        
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+        
+        button {
+            background-color: var(--blood-red);
+            color: var(--pale);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            margin: 15px 5px;
+            cursor: pointer;
+            font-family: 'Indie Flower', cursive;
+            font-size: 1rem;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+        
+        button:hover {
+            background-color: var(--light-blood);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 77, 77, 0.6);
+        }
+        
+        button::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            opacity: 0;
+            border-radius: 100%;
+            transform: scale(1, 1) translate(-50%);
+            transform-origin: 50% 50%;
+        }
+        
+        button:focus:not(:active)::after {
+            animation: ripple 0.6s ease-out;
+        }
+        
+        @keyframes ripple {
+            0% {
+                transform: scale(0, 0);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(20, 20);
+                opacity: 0;
+            }
+        }
+        
+        .accept-btn { 
+            background-color: var(--blood-red);
+            border: 1px solid var(--pale);
+        }
+        
+        .reject-btn { 
+            background-color: transparent;
+            border: 1px solid var(--light-blood);
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+        
+        .reject-btn:hover {
+            animation: wiggleEscape 1.5s forwards;
+            cursor: not-allowed;
+        }
+        
+        .request {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: left;
+            position: relative;
+            border-left: 3px solid var(--light-blood);
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .status {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .pending { 
+            background-color: var(--pale);
+            color: var(--black);
+        }
+        
+        .accepted { 
+            background-color: var(--green);
+            color: var(--black);
+            box-shadow: 0 0 10px rgba(139, 0, 0, 0.5);
+        }
+        
+        .rejected { 
+            background-color: transparent;
+            color: var(--pale);
+            border: 1px solid var(--light-blood);
+        }
+        
+        .hidden { display: none; }
+        
+        .heart { 
+            color: var(--light-blood); 
+            animation: pulse 1.5s infinite;
+            text-shadow: 0 0 10px var(--light-blood);
+            display: inline-block;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.3); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.8; }
+        }
+        
+        #loginScreen button {
+            min-width: 200px;
+            margin: 15px auto;
+            display: block;
+        }
+        
+        #adminResponses, #viewerRequests {
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+        
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--blood-red);
+            border-radius: 4px;
+        }
+        
+        /* Blood droplet animation */
+        .blood-droplet {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: var(--light-blood);
+            border-radius: 50% 0 50% 50%;
+            opacity: 0;
+            animation: bloodDrop 4s infinite;
+        }
+        
+        @keyframes bloodDrop {
+            0% { transform: translateY(-100px) rotate(45deg); opacity: 0; }
+            10% { opacity: 0.8; }
+            100% { transform: translateY(500px) rotate(45deg); opacity: 0; }
+        }
+        
+        /* Reject button escape animation */
+        @keyframes wiggleEscape {
+            0% { transform: translateX(0) rotate(0deg); }
+            20% { transform: translateX(-10px) rotate(-10deg); }
+            40% { transform: translateX(10px) rotate(10deg); }
+            60% { transform: translateX(-15px) rotate(-15deg); }
+            80% { transform: translateX(15px) rotate(15deg); }
+            100% { transform: translateX(calc(100vw - 100px)) rotate(360deg); }
+        }
+        
+        .reject-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--dark-blood);
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid var(--pale);
+            box-shadow: 0 0 20px rgba(139, 0, 0, 0.8);
+            z-index: 1000;
+            display: none;
+            max-width: 80%;
+            text-align: center;
+        }
+        
+        .reject-message button {
+            margin-top: 15px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #fff9fb;
+            font-size: 0.9rem;
+        }
+        .floating-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .heart {
+            position: absolute;
+            opacity: 0.3;
+            animation: float 10s linear infinite;
+        }
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Blood droplets for effect -->
+        <div class="blood-droplet" style="left: 10%; animation-delay: 0s;"></div>
+        <div class="blood-droplet" style="left: 30%; animation-delay: 1s;"></div>
+        <div class="blood-droplet" style="left: 70%; animation-delay: 2s;"></div>
+        <div class="blood-droplet" style="left: 90%; animation-delay: 3s;"></div>
+        
+        <!-- Login Screen -->
+        <div id="loginScreen">
+            <h1>Meeting Requests <span class="heart">♥</span></h1>
+            <button id="adminBtn">let's send her a request 🙏</button>
+            <button id="viewerBtn">Click here queen 👑</button>
+        </div>
+        
+        <!-- Admin Panel -->
+        <div id="adminPanel" class="hidden">
+            <h1>Write Your Request 📝</h1>
+            <form id="requestForm">
+                <div class="form-group">
+                    <label>Date :</label>
+                    <input type="date" id="meetingDate" required>
+                </div>
+                <div class="form-group">
+                    <label>Time:</label>
+                    <input type="time" id="meetingTime" required>
+                </div>
+                <div class="form-group">
+                    <label>Place of Meeting:</label>
+                    <input type="text" id="meetingPlace" placeholder="Where would you like to meet?" required>
+                </div>
+                <div class="form-group">
+                    <label>My message:</label>
+                    <textarea id="adminMessage" placeholder="Write here..."></textarea>
+                </div>
+                <button type="submit">Send request</button>
+            </form>
+            
+            <h2>Her Sacred Replies</h2>
+            <div id="adminResponses"></div>
+            <button id="adminLogout">back</button>
+        </div>
+        
+        <!-- Viewer Panel -->
+        <div id="viewerPanel" class="hidden">
+            <h1>Hilmi's Requests <span class="heart">♥</span></h1>
+            <div id="viewerRequests"></div>
+            <button id="viewerLogout">back</button>
+        </div>
+    </div>
+    <footer>
+        Made with love xDU0 ❤️
+    </footer>
+    <!-- Reject message popup -->
+    <div class="reject-message" id="rejectMessage">
+        <h3>Nice Try, My Love! ❤️</h3>
+        <p>Did you really think I'd let you reject me?</p>
+        <p>Our love is written in blood, sealed by fate!</p>
+        <button id="acceptInstead">Fine, I Accept! ❤️</button>
+    </div>
+    <div class="floating-hearts" id="floatingHearts"></div>
+    <script>
+        // Base URL for your API (update with your server URL)
+        const API_BASE_URL = 'http://localhost:3000/api';
+        
+        // Password protection
+        const ADMIN_PASSWORD = "emna";
+        
+        // Load requests from MongoDB
+        async function getRequests() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/requests`);
+                if (!response.ok) throw new Error('Failed to fetch requests');
+                return await response.json();
+            } catch (error) {
+                console.error('Error fetching requests:', error);
+                return [];
+            }
+        }
+        
+        // Save request to MongoDB
+        async function saveRequest(request) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/requests`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(request)
+                });
+                if (!response.ok) throw new Error('Failed to save request');
+                return await response.json();
+            } catch (error) {
+                console.error('Error saving request:', error);
+                return null;
+            }
+        }
+        
+        // Update request status in MongoDB
+        async function updateRequest(id, status, message) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/requests/${id}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        status: status,
+                        response: message || ""
+                    })
+                });
+                if (!response.ok) throw new Error('Failed to update request');
+                return await response.json();
+            } catch (error) {
+                console.error('Error updating request:', error);
+                return null;
+            }
+        }
+        
+        // Display requests in admin panel
+        async function displayAdminResponses() {
+            const requests = await getRequests();
+            const container = document.getElementById('adminResponses');
+            
+            if (requests.length === 0) {
+                container.innerHTML = "<p style='text-align:center;'>No meeting requests...</p>";
+                return;
+            }
+            
+            container.innerHTML = "";
+            
+            requests.forEach((req, index) => {
+                const div = document.createElement('div');
+                div.className = 'request';
+                div.innerHTML = `
+                    <div class="status ${req.status || 'pending'}">${(req.status || 'pending').toUpperCase()}</div>
+                    <h3>${req.date} at ${req.time}</h3>
+                    <p><strong>Where:</strong> ${req.place}</p>
+                    <p><strong>Your message:</strong> ${req.message}</p>
+                    ${req.response ? `<p><strong>Her reply:</strong> ${req.response}</p>` : ''}
+                `;
+                container.appendChild(div);
+            });
+        }
+        
+        // Display requests in viewer panel
+        async function displayViewerRequests() {
+            const requests = await getRequests();
+            const container = document.getElementById('viewerRequests');
+            
+            if (requests.length === 0) {
+                container.innerHTML = "<p style='text-align:center;'>No requests await...</p>";
+                return;
+            }
+            
+            container.innerHTML = "";
+            
+            requests.forEach((req, index) => {
+                const div = document.createElement('div');
+                div.className = 'request';
+                
+                if (!req.status) {
+                    // Pending request
+                    div.innerHTML = `
+                        <h3>${req.date} at ${req.time}</h3>
+                        <p><strong>Place:</strong> ${req.place}</p>
+                        <p><strong>His message:</strong> ${req.message}</p>
+                        <textarea id="responseMsg-${index}" placeholder="Your passionate reply..."></textarea>
+                        <div style="text-align:center;">
+                            <button class="accept-btn" data-id="${req._id}" data-index="${index}">I Accept ❤️</button>
+                            <button class="reject-btn" data-id="${req._id}" data-index="${index}" id="rejectBtn-${index}">I Decline 💔</button>
+                        </div>
+                    `;
+                } else {
+                    // Answered request
+                    div.innerHTML = `
+                        <div class="status ${req.status}">${req.status.toUpperCase()}</div>
+                        <h3>${req.date} at ${req.time}</h3>
+                        <p><strong>Place:</strong> ${req.place}</p>
+                        <p><strong>His message:</strong> ${req.message}</p>
+                        ${req.response ? `<p><strong>Your reply:</strong> ${req.response}</p>` : ''}
+                    `;
+                }
+                
+                container.appendChild(div);
+                
+                // Add event listener to accept buttons
+                const acceptBtn = document.querySelector(`.accept-btn[data-id="${req._id}"]`);
+                if (acceptBtn) {
+                    acceptBtn.addEventListener('click', async function() {
+                        const message = document.getElementById(`responseMsg-${index}`).value;
+                        await updateRequest(req._id, "accepted", message);
+                        displayViewerRequests();
+                        displayAdminResponses();
+                    });
+                }
+            });
+        }
+        
+        // Show reject message when reject button escapes
+        function showRejectMessage() {
+            const rejectMessage = document.getElementById('rejectMessage');
+            rejectMessage.style.display = 'block';
+            
+            // Set up the "accept instead" button
+            document.getElementById('acceptInstead').onclick = async function() {
+                // Find the request that was being rejected
+                const requests = await getRequests();
+                const pendingRequest = requests.find(req => !req.status);
+                if (pendingRequest) {
+                    await updateRequest(pendingRequest._id, "accepted", "I tried to reject but couldn't resist ❤️");
+                    displayViewerRequests();
+                    displayAdminResponses();
+                }
+                rejectMessage.style.display = 'none';
+            };
+        }
+        
+        // Close reject message if clicked outside
+        document.addEventListener('click', function(e) {
+            const rejectMessage = document.getElementById('rejectMessage');
+            if (rejectMessage.style.display === 'block' && !rejectMessage.contains(e.target)) {
+                rejectMessage.style.display = 'none';
+            }
+        });
+        
+        // Event listeners
+        document.getElementById('adminBtn').addEventListener('click', () => {
+            const password = prompt("Speak the secret word:");
+            if (password === ADMIN_PASSWORD) {
+                document.getElementById('loginScreen').classList.add('hidden');
+                document.getElementById('adminPanel').classList.remove('hidden');
+                document.getElementById('meetingDate').min = new Date().toISOString().split('T')[0];
+                displayAdminResponses();
+            } else {
+                alert("no no ghalet emounti");
+            }
+        });
+        
+        document.getElementById('viewerBtn').addEventListener('click', () => {
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('viewerPanel').classList.remove('hidden');
+            displayViewerRequests();
+        });
+        
+        document.getElementById('adminLogout').addEventListener('click', () => {
+            document.getElementById('adminPanel').classList.add('hidden');
+            document.getElementById('loginScreen').classList.remove('hidden');
+        });
+        
+        document.getElementById('viewerLogout').addEventListener('click', () => {
+            document.getElementById('viewerPanel').classList.add('hidden');
+            document.getElementById('loginScreen').classList.remove('hidden');
+        });
+        
+        document.getElementById('requestForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const request = {
+                date: document.getElementById('meetingDate').value,
+                time: document.getElementById('meetingTime').value,
+                place: document.getElementById('meetingPlace').value,
+                message: document.getElementById('adminMessage').value,
+                status: "",
+                response: ""
+            };
+            
+            await saveRequest(request);
+            document.getElementById('requestForm').reset();
+            displayAdminResponses();
+            
+            // Create blood droplet animation effect
+            const effect = document.createElement('div');
+            effect.style.position = 'fixed';
+            effect.style.top = '0';
+            effect.style.left = '50%';
+            effect.style.width = '3px';
+            effect.style.height = '3px';
+            effect.style.backgroundColor = 'var(--light-blood)';
+            effect.style.borderRadius = '50%';
+            effect.style.boxShadow = '0 0 10px var(--light-blood)';
+            effect.style.transform = 'translateX(-50%)';
+            effect.style.animation = 'bloodFall 1s forwards';
+            document.body.appendChild(effect);
+            
+            setTimeout(() => {
+                effect.remove();
+            }, 1000);
+            
+            alert("Your meeting request has been sent!");
+        });
+        
+        // Add blood droplet animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes bloodFall {
+                0% { transform: translate(-50%, -100px) scale(1); opacity: 0; }
+                10% { opacity: 1; }
+                100% { transform: translate(-50%, 100vh) scale(0.5); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Show reject message when a reject button finishes escaping
+        document.addEventListener('animationend', function(e) {
+            if (e.animationName === 'wiggleEscape') {
+                showRejectMessage();
+                // Reset the button position after showing message
+                e.target.style.animation = '';
+            }
+        });
+
+        function createHearts() {
+            const container = document.getElementById('floatingHearts');
+            const heartCount = 15;
+            
+            for (let i = 0; i < heartCount; i++) {
+                const heart = document.createElement('div');
+                heart.innerHTML = '♥';
+                heart.className = 'heart';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.top = Math.random() * 100 + 'vh';
+                heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+                heart.style.animationDuration = (Math.random() * 10 + 5) + 's';
+                heart.style.animationDelay = (Math.random() * 5) + 's';
+                container.appendChild(heart);
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            createHearts();
+        });
+    </script>
+</body>
+</html>
